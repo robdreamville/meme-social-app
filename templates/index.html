@@ -7,11 +7,31 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <nav class="top-nav">
+        <div class="brand">🎭 Emoji Social</div>
+        <div class="nav-actions">
+            <a href="{{ url_for('home') }}" class="nav-link">Feed</a>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('create_post') }}" class="post-btn small">➕ Create</a>
+                <span class="welcome">Hi, {{ current_user.username }}</span>
+                <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="nav-link">Login</a>
+                <a href="{{ url_for('signup') }}" class="nav-link emphasis">Sign up</a>
+            {% endif %}
+        </div>
+    </nav>
+
     <div class="container">
         <div class="header">
-            <h1>🎭 Emoji Social 🎭</h1>
-            <p>Express yourself without words!</p>
-            <a href="{{ url_for('create_post') }}" class="post-btn">➕ Create Post</a>
+            <h1>Express yourself without words!</h1>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('create_post') }}" class="post-btn">➕ Create Post</a>
+            {% else %}
+                <div class="cta-auth">
+                    <a href="{{ url_for('signup') }}" class="post-btn">Create your account</a>
+                </div>
+            {% endif %}
         </div>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -37,13 +57,14 @@
                     {% endif %}
                     
                     <div class="vote-section">
-                        <a href="{{ url_for('vote', post_id=post.id, vote_type='up') }}" class="vote-btn upvote">
+                        {% set my_vote = user_votes.get(post.id) if user_votes else None %}
+                        <a href="{{ url_for('vote', post_id=post.id, vote_type='up') }}" class="vote-btn upvote {% if my_vote == 1 %}active{% endif %}">
                             <span>👍</span> {{ post.upvotes }}
                         </a>
 
                         <span class="score">Score: {{ post.upvotes - post.downvotes }}</span>
 
-                        <a href="{{ url_for('vote', post_id=post.id, vote_type='down') }}" class="vote-btn downvote">
+                        <a href="{{ url_for('vote', post_id=post.id, vote_type='down') }}" class="vote-btn downvote {% if my_vote == -1 %}active{% endif %}">
                             <span>👎</span> {{ post.downvotes }}
                         </a>
                     </div>
