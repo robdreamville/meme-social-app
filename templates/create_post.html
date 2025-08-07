@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post - Emoji Social</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>📝 Create New Post</h1>
+        <a href="{{ url_for('home') }}" class="back-btn">← Back to Feed</a>
+    </div>
+    
+    <div class="form-container">
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="emoji_text">Emoji Combination:</label>
+                <div class="emoji-controls">
+                    <button type="button" id="emoji-picker-btn" class="emoji-picker-btn">😀 Pick Emoji</button>
+                    <button type="button" onclick="clearEmojis()" class="clear-btn">🗑️ Clear</button>
+                </div>
+                <div id="emoji-picker-container"></div>
+                <textarea id="emoji_text" name="emoji_text" 
+                         class="emoji-input" rows="3" 
+                         placeholder="Click 'Pick Emoji' above or paste your own! 🎭"
+                         oninput="filterEmojis(this)"></textarea>
+                <small>⚠️ Text will be automatically removed - emojis only!</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="gif_search">Search GIFs:</label>
+                <input type="text" id="gif_search" name="gif_search" 
+                       placeholder="Search for the perfect GIF..." />
+                <button type="button" onclick="searchGifs()" class="search-btn">🔍 Search</button>
+            </div>
+            
+            <div id="gif_results" class="gif-grid"></div>
+            <input type="hidden" id="selected_gif" name="selected_gif" />
+            
+            <div class="form-group">
+                <p><strong>Rules:</strong></p>
+                <ul>
+                    <li>🚫 No text allowed (emojis only!)</li>
+                    <li>✅ Images, GIFs, and memes welcome</li>
+                    <li>🎭 Be creative and have fun!</li>
+                </ul>
+            </div>
+            
+            <button type="submit" class="submit-btn">🚀 Post It!</button>
+        </form>
+    </div>
+
+    <!-- Emoji Picker Library -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
+    <script>
+        let selectedGifUrl = '';
+        let emojiPicker = null;
+        
+        // Initialize emoji picker
+        document.addEventListener('DOMContentLoaded', function() {
+            const pickerBtn = document.getElementById('emoji-picker-btn');
+            const pickerContainer = document.getElementById('emoji-picker-container');
+            
+            pickerBtn.addEventListener('click', function() {
+                if (!emojiPicker) {
+                    // Create the emoji picker
+                    emojiPicker = document.createElement('emoji-picker');
+                    emojiPicker.addEventListener('emoji-click', function(event) {
+                        insertEmoji(event.detail.unicode);
+                        // Hide picker after selection
+                        pickerContainer.style.display = 'none';
+                    });
+                    pickerContainer.appendChild(emojiPicker);
+                }
+                
+                // Toggle picker visibility
+                if (pickerContainer.style.display === 'none' || !pickerContainer.style.display) {
+                    pickerContainer.style.display = 'block';
+                } else {
+                    pickerContainer.style.display = 'none';
+                }
+            });
+        });
+        
+        // Block non-emoji text input
+        function filterEmojis(input) {
+            // Regex to match emojis and whitespace
+            const emojiRegex = /[\p{Emoji}\s]/gu;
+            const text = input.value;
+            const filteredText = text.match(emojiRegex)?.join('') || '';
+            
+            if (text !== filteredText) {
+                input.value = filteredText;
+                showWarning('Only emojis allowed! 😊');
+            }
+        }
+        
+        function showWarning(message) {
+            // Create temporary warning message
+            const warning = document.createElement('div');
+            warning.textContent = message;
+            warning.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #ff6b6b; color: white; padding: 10px; border-radius: 5px; z-index: 1000;';
+            document.body.appendChild(warning);
+            
+            setTimeout(() => warning.remove(), 3000);
+        }
+        
+        // Add emoji to textarea
+        function insertEmoji(emoji) {
+            const textarea = document.getElementById('emoji_text');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            
+            textarea.value = text.substring(0, start) + emoji + text.substring(end);
+            textarea.focus();
+            textarea.setSelectionRange(start + emoji.length, start + emoji.length);
+        }
+        
+        function clearEmojis() {
+            document.getElementById('emoji_text').value = '';
+            document.getElementById('emoji_text').focus();
+        }
+        
+        async function searchGifs() {
+            const query = document.getElementById('gif_search').value;
+            if (!query) {
+                alert('Please enter a search term');
+                return;
+            }
+            
+            console.log('Searching for:', query);
+            
+            try {
+                const response = await fetch(`/api/search-gifs?q=${encodeURIComponent(query)}`);
+                console.log('Response status:', response.status);
+                
+                const data = await response.json();
+                console.log('Response data:', data);
+                
+                if (data.data && data.data.length > 0) {
+                    displayGifs(data.data);
+                } else {
+                    document.getElementById('gif_results').innerHTML = '<p>No GIFs found. Try a different search term.</p>';
+                }
+            } catch (error) {
+                console.error('Error searching GIFs:', error);
+                document.getElementById('gif_results').innerHTML = '<p>Error loading GIFs. Check console for details.</p>';
+            }
+        }
+        
+        function displayGifs(gifs) {
+            const resultsDiv = document.getElementById('gif_results');
+            resultsDiv.innerHTML = '';
+            
+            gifs.forEach(gif => {
+                const gifDiv = document.createElement('div');
+                gifDiv.className = 'gif-item';
+                gifDiv.onclick = () => selectGif(gif.images.fixed_height.url, gifDiv);
+                
+                const img = document.createElement('img');
+                img.src = gif.images.fixed_height_small.url;
+                img.alt = gif.title;
+                
+                gifDiv.appendChild(img);
+                resultsDiv.appendChild(gifDiv);
+            });
+        }
+        
+        function selectGif(gifUrl, element) {
+            // Remove previous selection
+            document.querySelectorAll('.gif-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Select current item
+            element.classList.add('selected');
+            selectedGifUrl = gifUrl;
+            document.getElementById('selected_gif').value = gifUrl;
+        }
+    </script>
+</body>
+</html>
