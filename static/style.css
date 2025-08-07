@@ -1,181 +1,235 @@
+/* General Styles */
 body {
-    font-family: Arial, sans-serif;
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f5f5f5;
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f2f5;
+    color: #1c1e21;
+    margin: 0;
+    line-height: 1.6;
 }
 
+/* Add Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/* Main container */
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+/* Header */
 .header {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     text-align: center;
     margin-bottom: 30px;
 }
 
-.post-btn {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 5px;
-    display: inline-block;
-    margin-bottom: 20px;
+.header h1 {
+    font-size: 2.5em;
+    font-weight: 700;
+    color: #1877f2;
 }
 
+.header p {
+    color: #606770;
+}
+
+/* Create Post Button */
+.post-btn {
+    background-color: #1877f2;
+    color: #fff;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+    display: inline-block;
+}
+
+.post-btn:hover {
+    background-color: #166fe5;
+}
+
+/* Post Styling */
 .post {
-    background: white;
+    background: #fff;
     border-radius: 10px;
     padding: 20px;
     margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .post-content {
     text-align: center;
-    font-size: 2em;
-    margin-bottom: 15px;
+    font-size: 2.5em;
+    margin-bottom: 20px;
 }
 
 .post-image {
     max-width: 100%;
     height: auto;
-    border-radius: 5px;
+    border-radius: 8px;
 }
 
+/* Vote Section */
 .vote-section {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
-    gap: 15px;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 15px;
 }
 
 .vote-btn {
-    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
     text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.3s;
 }
 
 .upvote {
-    background-color: #28a745;
-    color: white;
+    color: #31a24c;
+}
+
+.upvote:hover {
+    background-color: #f0f2f5;
 }
 
 .downvote {
-    background-color: #dc3545;
-    color: white;
+    color: #f02849;
+}
+
+.downvote:hover {
+    background-color: #f0f2f5;
 }
 
 .score {
-    font-weight: bold;
-    font-size: 1.2em;
+    font-weight: 700;
+    font-size: 1.3em;
+    color: #606770;
 }
 
+/* No Posts Message */
 .no-posts {
     text-align: center;
-    color: #666;
-    font-style: italic;
-    margin-top: 50px;
+    color: #606770;
+    padding: 40px;
+    background: #fff;
+    border-radius: 10px;
 }
 
-/* Form styles for create post page */
+/* Form Styles */
 .form-container {
-    background: white;
+    background: #fff;
     border-radius: 10px;
-    padding: 30px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 40px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #606770;
 }
 
 .form-group input, .form-group textarea {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    padding: 12px;
+    border: 1px solid #dddfe2;
+    border-radius: 8px;
     box-sizing: border-box;
+    font-size: 1em;
 }
 
 .emoji-input {
-    font-size: 1.5em;
+    font-size: 2em;
     text-align: center;
+    resize: vertical;
 }
 
 .submit-btn {
-    background-color: #28a745;
-    color: white;
-    padding: 12px 25px;
+    background-color: #31a24c;
+    color: #fff;
+    padding: 15px 30px;
     border: none;
-    border-radius: 5px;
-    font-size: 16px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
     cursor: pointer;
     width: 100%;
+    transition: background-color 0.3s;
 }
 
 .submit-btn:hover {
-    background-color: #218838;
+    background-color: #2b9242;
 }
 
 .back-btn {
-    background-color: #6c757d;
-    color: white;
-    padding: 8px 15px;
+    background: none;
+    color: #1877f2;
     text-decoration: none;
-    border-radius: 5px;
-    display: inline-block;
-    margin-bottom: 20px;
+    font-weight: 600;
 }
 
-/* GIF search styles */
+/* GIF Search */
 .search-btn {
-    background-color: #007bff;
-    color: white;
-    padding: 8px 15px;
+    background-color: #1877f2;
+    color: #fff;
+    padding: 12px 20px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
     margin-left: 10px;
+    font-weight: 600;
 }
 
 .gif-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     gap: 10px;
     margin: 20px 0;
-    max-height: 400px;
+    max-height: 360px;
     overflow-y: auto;
+    padding: 10px;
+    border: 1px solid #dddfe2;
+    border-radius: 8px;
 }
 
 .gif-item {
     cursor: pointer;
     border: 3px solid transparent;
-    border-radius: 5px;
-    transition: border-color 0.3s;
+    border-radius: 8px;
+    transition: border-color 0.3s, transform 0.2s;
 }
 
 .gif-item:hover {
-    border-color: #007bff;
+    transform: scale(1.05);
 }
 
 .gif-item.selected {
-    border-color: #28a745;
+    border-color: #1877f2;
 }
 
 .gif-item img {
     width: 100%;
-    height: 120px;
+    height: 100px;
     object-fit: cover;
-    border-radius: 3px;
+    border-radius: 5px;
 }
 
-/* Emoji picker styles */
+/* Emoji Picker */
 .emoji-controls {
     display: flex;
     gap: 10px;
@@ -183,33 +237,48 @@ body {
 }
 
 .emoji-picker-btn, .clear-btn {
-    background-color: #007bff;
-    color: white;
+    background-color: #1877f2;
+    color: #fff;
     border: none;
-    border-radius: 5px;
-    padding: 8px 12px;
+    border-radius: 8px;
+    padding: 10px 15px;
     cursor: pointer;
-    font-size: 14px;
+    font-weight: 600;
+    transition: background-color 0.3s;
 }
 
 .clear-btn {
-    background-color: #dc3545;
+    background-color: #f02849;
 }
 
 .emoji-picker-btn:hover {
-    background-color: #0056b3;
+    background-color: #166fe5;
 }
 
 .clear-btn:hover {
-    background-color: #c82333;
+    background-color: #d9203d;
 }
 
 #emoji-picker-container {
-    margin-bottom: 10px;
+    margin-top: 10px;
     display: none;
 }
 
 emoji-picker {
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        padding: 0 10px;
+    }
+
+    .header {
+        padding: 15px;
+    }
+
+    .form-container {
+        padding: 20px;
+    }
 }

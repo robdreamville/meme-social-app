@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.utils import secure_filename
 import os
 import requests
 from datetime import datetime
@@ -12,8 +11,6 @@ load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///emoji_social.db'
-app.config['UPLOAD_FOLDER'] = 'static/uploads'
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
 # Add your Giphy API key here
 GIPHY_API_KEY = os.getenv('GIPHY_API_KEY')  # Replace with your actual key
@@ -23,7 +20,6 @@ db = SQLAlchemy(app)
 # Database Models
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    filename = db.Column(db.String(100))  # Made nullable for GIF posts
     gif_url = db.Column(db.String(500))   # For Giphy URLs
     emoji_text = db.Column(db.String(500))  # For emoji combinations
     upvotes = db.Column(db.Integer, default=0)

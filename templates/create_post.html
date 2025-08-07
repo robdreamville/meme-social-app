@@ -7,48 +7,43 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="header">
-        <h1>📝 Create New Post</h1>
-        <a href="{{ url_for('home') }}" class="back-btn">← Back to Feed</a>
-    </div>
-    
-    <div class="form-container">
-        <form method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="emoji_text">Emoji Combination:</label>
-                <div class="emoji-controls">
-                    <button type="button" id="emoji-picker-btn" class="emoji-picker-btn">😀 Pick Emoji</button>
-                    <button type="button" onclick="clearEmojis()" class="clear-btn">🗑️ Clear</button>
+    <div class="container">
+        <div class="header">
+            <h1>📝 Create New Post</h1>
+            <a href="{{ url_for('home') }}" class="back-btn">← Back to Feed</a>
+        </div>
+
+        <div class="form-container">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="emoji_text">Emoji Combination:</label>
+                    <div class="emoji-controls">
+                        <button type="button" id="emoji-picker-btn" class="emoji-picker-btn">😀 Pick Emoji</button>
+                        <button type="button" onclick="clearEmojis()" class="clear-btn">🗑️ Clear</button>
+                    </div>
+                    <div id="emoji-picker-container"></div>
+                    <textarea id="emoji_text" name="emoji_text"
+                             class="emoji-input" rows="3"
+                             placeholder="Click 'Pick Emoji' above or paste your own! 🎭"
+                             oninput="filterEmojis(this)"></textarea>
+                    <small>⚠️ Text will be automatically removed - emojis only!</small>
                 </div>
-                <div id="emoji-picker-container"></div>
-                <textarea id="emoji_text" name="emoji_text" 
-                         class="emoji-input" rows="3" 
-                         placeholder="Click 'Pick Emoji' above or paste your own! 🎭"
-                         oninput="filterEmojis(this)"></textarea>
-                <small>⚠️ Text will be automatically removed - emojis only!</small>
-            </div>
-            
-            <div class="form-group">
-                <label for="gif_search">Search GIFs:</label>
-                <input type="text" id="gif_search" name="gif_search" 
-                       placeholder="Search for the perfect GIF..." />
-                <button type="button" onclick="searchGifs()" class="search-btn">🔍 Search</button>
-            </div>
-            
-            <div id="gif_results" class="gif-grid"></div>
-            <input type="hidden" id="selected_gif" name="selected_gif" />
-            
-            <div class="form-group">
-                <p><strong>Rules:</strong></p>
-                <ul>
-                    <li>🚫 No text allowed (emojis only!)</li>
-                    <li>✅ Images, GIFs, and memes welcome</li>
-                    <li>🎭 Be creative and have fun!</li>
-                </ul>
-            </div>
-            
-            <button type="submit" class="submit-btn">🚀 Post It!</button>
-        </form>
+
+                <div class="form-group">
+                    <label for="gif_search">Or... Search GIFs:</label>
+                    <div style="display: flex;">
+                        <input type="text" id="gif_search" name="gif_search"
+                               placeholder="Search for the perfect GIF..." style="flex-grow: 1;"/>
+                        <button type="button" onclick="searchGifs()" class="search-btn">🔍 Search</button>
+                    </div>
+                </div>
+
+                <div id="gif_results" class="gif-grid"></div>
+                <input type="hidden" id="selected_gif" name="selected_gif" />
+
+                <button type="submit" class="submit-btn">🚀 Post It!</button>
+            </form>
+        </div>
     </div>
 
     <!-- Emoji Picker Library -->

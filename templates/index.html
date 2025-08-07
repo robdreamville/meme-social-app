@@ -7,51 +7,54 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="header">
-        <h1>🎭 Emoji Social 🎭</h1>
-        <p>Express yourself without words!</p>
-        <a href="{{ url_for('create_post') }}" class="post-btn">➕ Create Post</a>
-    </div>
-    
-    {% if posts %}
-        {% for post in posts %}
-            <div class="post">
-                {% if post.emoji_text %}
-                    <div class="post-content">{{ post.emoji_text }}</div>
-                {% endif %}
-                
-                {% if post.gif_url %}
-                    <div class="post-content">
-                        <img src="{{ post.gif_url }}" 
-                             alt="Post GIF" class="post-image">
-                    </div>
-                {% endif %}
-                
-                {% if post.filename %}
-                    <div class="post-content">
-                        <img src="{{ url_for('static', filename='uploads/' + post.filename) }}" 
-                             alt="Post image" class="post-image">
-                    </div>
-                {% endif %}
-                
-                <div class="vote-section">
-                    <a href="{{ url_for('vote', post_id=post.id, vote_type='up') }}" class="vote-btn upvote">
-                        👍 {{ post.upvotes }}
-                    </a>
-                    
-                    <span class="score">Score: {{ post.upvotes - post.downvotes }}</span>
-                    
-                    <a href="{{ url_for('vote', post_id=post.id, vote_type='down') }}" class="vote-btn downvote">
-                        👎 {{ post.downvotes }}
-                    </a>
-                </div>
-            </div>
-        {% endfor %}
-    {% else %}
-        <div class="no-posts">
-            <h3>No posts yet! 😢</h3>
-            <p>Be the first to share something awesome!</p>
+    <div class="container">
+        <div class="header">
+            <h1>🎭 Emoji Social 🎭</h1>
+            <p>Express yourself without words!</p>
+            <a href="{{ url_for('create_post') }}" class="post-btn">➕ Create Post</a>
         </div>
-    {% endif %}
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if posts %}
+            {% for post in posts %}
+                <div class="post">
+                    {% if post.emoji_text %}
+                        <div class="post-content">{{ post.emoji_text }}</div>
+                    {% endif %}
+                    
+                    {% if post.gif_url %}
+                        <div class="post-content">
+                            <img src="{{ post.gif_url }}"
+                                 alt="Post GIF" class="post-image">
+                        </div>
+                    {% endif %}
+                    
+                    <div class="vote-section">
+                        <a href="{{ url_for('vote', post_id=post.id, vote_type='up') }}" class="vote-btn upvote">
+                            <span>👍</span> {{ post.upvotes }}
+                        </a>
+
+                        <span class="score">Score: {{ post.upvotes - post.downvotes }}</span>
+
+                        <a href="{{ url_for('vote', post_id=post.id, vote_type='down') }}" class="vote-btn downvote">
+                            <span>👎</span> {{ post.downvotes }}
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-posts">
+                <h3>No posts yet! 😢</h3>
+                <p>Be the first to share something awesome!</p>
+            </div>
+        {% endif %}
+    </div>
 </body>
 </html>
