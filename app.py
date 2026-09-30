@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your-secret-key-here'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-only-change-me')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///emoji_social.db'
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
@@ -71,8 +71,8 @@ def search_gifs():
         return jsonify({'data': []})
     
     try:
-        print(f"Searching Giphy for: {query}")
-        print(f"Using API key: {GIPHY_API_KEY[:10]}...")  # Only show first 10 chars for security
+        print(f"Searching Giphy f
+        print(f"Using API key: {(GIPHY_API_KEY or 'missing-key')[:10]}...")  # Only show first 10 chars for security
         
         response = requests.get(
             'https://api.giphy.com/v1/gifs/search',
@@ -110,4 +110,4 @@ def vote(post_id, vote_type):
     return redirect(url_for('home'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=os.environ.get('FLASK_DEBUG') == '1')
